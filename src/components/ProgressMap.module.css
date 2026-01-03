@@ -1,0 +1,161 @@
+.mapContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timelineLine {
+    position: absolute;
+    left: 43px;
+    /* Center of the icon (24px icon + padding/border approx) */
+    top: 2rem;
+    bottom: 2rem;
+    width: 4px;
+    background: #e2e8f0;
+    z-index: 0;
+    border-radius: 2px;
+}
+
+.stepCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Status Styles */
+.completed .iconContainer {
+    background: #166534;
+    /* Green */
+    color: white;
+    border-color: #166534;
+}
+
+.current .iconContainer {
+    background: #2563eb;
+    /* Blue */
+    color: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+    border-color: #2563eb;
+    animation: pulse 2s infinite;
+}
+
+.locked .iconContainer {
+    background: #f1f5f9;
+    color: #94a3b8;
+    border-color: #cbd5e1;
+}
+
+/* Card States */
+.activeCard {
+    border-color: #2563eb;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+    transform: translateX(8px);
+}
+
+.locked {
+    opacity: 0.7;
+    background: #f8fafc;
+}
+
+.completed {
+    border-color: #86efac;
+}
+
+/* Icon Container */
+.iconContainer {
+    min-width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.content {
+    flex: 1;
+}
+
+.stepTitle {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.stepDescription {
+    margin: 0;
+    color: #64748b;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.actionButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #2563eb;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.actionButton:hover {
+    background: #1d4ed8;
+}
+
+.lockedLabel {
+    display: inline-flex;
+    padding: 0.25rem 0.75rem;
+    background: #e2e8f0;
+    color: #64748b;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.successBadge {
+    display: inline-flex;
+    padding: 0.5rem 1rem;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 8px;
+    font-weight: 700;
+    margin-top: 0.5rem;
+
+    .timelineLine {
+        left: 27px;
+        /* Adjusted visual center for mobile */
+    }
+
+    .stepCard {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .iconContainer {
+        min-width: 32px;
+        height: 32px;
+    }
+
+    .stepTitle {
+        font-size: 1.1rem;
+    }
+}

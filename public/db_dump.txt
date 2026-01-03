@@ -1,0 +1,31 @@
+--- DOCUMENTOS EN DB ---
+ID: ba395ebf-a549-4320-bf18-95b26eae2e0a
+Type: TITULO
+User Email: fer@gmail.com
+URL: http://mi-titulo.pdf
+Created At: Fri Dec 05 2025 11:05:50 GMT-0300 (hora estándar de Argentina)
+-------------------------
+ID: 339e9cdd-7400-4c29-8d6d-86b93ae184e3
+Type: DNI
+User Email: fer@gmail.com
+URL: /uploads/1764944096629_Descargar_comprobante__2_.pdf
+Created At: Fri Dec 05 2025 11:14:56 GMT-0300 (hora estándar de Argentina)
+-------------------------
+ID: 0604eda9-be80-45ac-8938-aff1ebb7180c
+Type: PDF DNI DORSO
+User Email: fer@gmail.com
+URL: /uploads/1764947008938_Cerviol__Maria_Sol_-_PNPC_2024.pdf
+Created At: Fri Dec 05 2025 12:03:28 GMT-0300 (hora estándar de Argentina)
+-------------------------
+ID: 1f0df7b7-0df4-440f-aa18-c950231752fc
+Type: FOTO TIPO CARNET - FONDO BLANCO
+User Email: fer@gmail.com
+URL: /uploads/1764947340103_17_PRO_ORANGE.png
+Created At: Fri Dec 05 2025 12:09:00 GMT-0300 (hora estándar de Argentina)
+-------------------------
+ID: e07d2ee9-b8d6-4663-a72a-ac146db2c0a2
+Type: PDF TITULO SECUNDARIO O DE GRADO
+User Email: fer@gmail.com
+URL: /uploads/1764951261938_Cerviol__Maria_Sol_-_PNPC_2024.pdf
+Created At: Fri Dec 05 2025 13:14:21 GMT-0300 (hora estándar de Argentina)
+-------------------------

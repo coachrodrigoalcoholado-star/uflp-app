@@ -1,0 +1,106 @@
+/* DocumentsTable.module.css */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.thead {
+    background-color: var(--bg-secondary, #f0f0f0);
+    text-align: left;
+}
+
+.th {
+    padding: 0.75rem;
+    border-bottom: 2px solid var(--border-color, #ccc);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.tr {
+    border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.td {
+    padding: 0.75rem;
+    color: var(--text-primary);
+}
+
+.link {
+    color: var(--uflp-blue, #0070f3);
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Status Badges */
+.badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.approved {
+    background-color: var(--badge-approved-bg, #e6fffa);
+    color: var(--badge-approved-text, #047481);
+}
+
+.rejected {
+    background-color: var(--badge-rejected-bg, #fff5f5);
+    color: var(--badge-rejected-text, #c53030);
+}
+
+.pending {
+    background-color: var(--badge-pending-bg, #fffaf0);
+    color: var(--badge-pending-text, #c05621);
+}
+
+/* Mobile Card View */
+@media (max-width: 768px) {
+    .thead {
+        display: none;
+    }
+
+    .table,
+    .tbody,
+    .tr,
+    .td {
+        display: block;
+        width: 100%;
+    }
+
+    .tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color, #ddd);
+        border-radius: 8px;
+        padding: 1rem;
+        background-color: var(--card-bg, #fff);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-color, #eee);
+        text-align: right;
+    }
+
+    .td:last-child {
+        border-bottom: none;
+    }
+
+    .td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-secondary, #666);
+        text-align: left;
+        margin-right: 1rem;
+    }
+}
