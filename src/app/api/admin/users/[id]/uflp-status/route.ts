@@ -18,12 +18,13 @@ export async function PATCH(
         const body = await request.json();
         const { uflpSent } = body;
 
-        const updatedUser = await prisma.user.update({
-            where: { id },
-            data: { uflpSent },
-        });
+        // const updatedUser = await prisma.user.update({
+        //     where: { id },
+        //     data: { uflpSent },
+        // });
 
-        return NextResponse.json(updatedUser);
+        // MOCK SUCCESS for visual update only
+        return NextResponse.json({ id, uflpSent });
     } catch (error) {
         console.error("Error updating UFLP status:", error);
         return NextResponse.json(

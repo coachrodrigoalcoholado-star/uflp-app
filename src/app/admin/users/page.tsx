@@ -195,7 +195,7 @@ export default function UsersPage() {
                                         <th>Usuario</th>
                                         <th>Email</th>
                                         <th>Rol</th>
-                                        <th>Camada</th>
+                                        {/* <th>Camada</th> */}
                                         <th>Perfil</th>
                                         <th>Documentos</th>
                                         <th>Pagos</th>
@@ -219,7 +219,7 @@ export default function UsersPage() {
                                                     {user.role}
                                                 </span>
                                             </td>
-                                            <td>
+                                            {/* <td>
                                                 <select
                                                     value={user.cohort?.id || ''}
                                                     onChange={(e) => handleCohortChange(user.id, e.target.value)}
@@ -242,7 +242,7 @@ export default function UsersPage() {
                                                     ))}
                                                     <option value="">(Quitar asignación)</option>
                                                 </select>
-                                            </td>
+                                            </td> */}
                                             <td>
                                                 <span className={user.profileCompleted ? styles.badgeApproved : styles.badgePending}>
                                                     {user.profileCompleted ? 'Completo' : 'Incompleto'}

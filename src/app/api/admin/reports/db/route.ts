@@ -11,17 +11,17 @@ export async function GET() {
                 role: 'STUDENT'
             },
             include: {
-                cohort: true
+                // cohort: true
             },
             orderBy: [
-                { cohort: { code: 'asc' } },
+                // { cohort: { code: 'asc' } },
                 { lastNamePaterno: 'asc' }
             ]
         });
 
         // Format data to match "Profile Form" order
         const formattedData = users.map(user => ({
-            "Camada": user.cohort?.code || 'Sin asignar',
+            "Camada": 'Desactivado temporalmente', // user.cohort?.code || 'Sin asignar',
             "Nombre(s)": user.firstName || '',
             "Apellido Paterno": user.lastNamePaterno || '',
             "Apellido Materno": user.lastNameMaterno || '',

@@ -43,7 +43,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
         { href: '/admin/users', label: 'Usuarios', icon: Users },
         { href: '/admin/documents', label: 'Documentos', icon: FileText },
         { href: '/admin/payments', label: 'Pagos', icon: CreditCard },
-        { href: '/admin/cohorts', label: 'Camadas', icon: GraduationCap },
+        // { href: '/admin/cohorts', label: 'Camadas', icon: GraduationCap },
         { href: '/admin/search', label: 'Búsqueda', icon: Search },
         { href: '/admin/reports/db', label: 'Base de Datos', icon: Database },
         { href: '/admin/settings', label: 'Configuración', icon: Settings },

@@ -39,8 +39,8 @@ model User {
   documents       Document[]
   payments        Payment[]
   notifications   Notification[]
-  cohortId        String?
-  cohort          Cohort?    @relation(fields: [cohortId], references: [id])
+  // cohortId        String?
+  // cohort          Cohort?    @relation(fields: [cohortId], references: [id])
   distributionUFLP       String   @default("PENDING")
   distributionUFLPDate   DateTime?
   distributionECOA       String   @default("PENDING")
@@ -52,22 +52,22 @@ model User {
   sedeNombre      String?
   entrenadorNombre String?
   entrenadorCelular String?
-  uflpSent        Boolean    @default(false)
+  // uflpSent        Boolean    @default(false)
 
-  @@index([cohortId])
+  // @@index([cohortId])
   @@index([role])
   @@index([createdAt])
 }
 
-model Cohort {
-  id        String   @id @default(uuid())
-  code      String   @unique
-  startDate DateTime
-  endDate   DateTime
-  users     User[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model Cohort {
+//   id        String   @id @default(uuid())
+//   code      String   @unique
+//   startDate DateTime
+//   endDate   DateTime
+//   users     User[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
 model Document {
   id              String   @id @default(uuid())

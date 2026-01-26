@@ -30,7 +30,7 @@ interface User {
     phone: string | null;
     documents: Document[];
     payments: Payment[];
-    cohort: { code: string } | null;
+    cohort?: { code: string } | null; // Made optional for immediate deployment fix
     uflpSent?: boolean; // Optional until DB is fully synced
 }
 
@@ -263,26 +263,7 @@ export default function DashboardTable({ initialData }: DashboardTableProps) {
                         />
                     </div>
 
-                    {/* Cohort Filter */}
-                    <div className="relative min-w-[200px]">
-                        <Filter className={styles.searchIcon} style={{ left: '12px' }} />
-                        <select
-                            className={styles.searchInput}
-                            value={cohortFilter}
-                            onChange={(e) => setCohortFilter(e.target.value)}
-                            style={{ paddingLeft: '2.5rem', appearance: 'none' }}
-                        >
-                            <option value="">Todas las Camadas</option>
-                            {uniqueCohorts.map(code => (
-                                <option key={code} value={code}>Camada {code}</option>
-                            ))}
-                        </select>
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                            ▼
-                        </div>
-                    </div>
                 </div>
-
                 <div className={styles.counter}>
                     Total Alumnos: <strong>{processedData.length}</strong>
                 </div>
@@ -296,7 +277,7 @@ export default function DashboardTable({ initialData }: DashboardTableProps) {
                         <thead className={styles.thead}>
                             <tr>
                                 <th className={`${styles.th} ${styles.thLeft}`}>ALUMNO</th>
-                                <th className={styles.th}>CAMADA</th>
+                                {/* <th className={styles.th}>CAMADA</th> */}
                                 {DOCUMENT_TYPES.map((type) => (
                                     <th key={type} className={styles.th} title={formatHeaderName(type)}>
                                         <div className={styles.headerIcon}>{getDocIcon(type)}</div>
@@ -323,14 +304,14 @@ export default function DashboardTable({ initialData }: DashboardTableProps) {
                                             )}
                                         </div>
                                     </td>
-                                    {/* Cohort Column */}
-                                    <td className={styles.td}>
+                                    {/* Cohort Column - Removed */}
+                                    {/* <td className={styles.td}>
                                         <div className="flex justify-center">
                                             <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs font-semibold border border-slate-200">
                                                 {user.cohort?.code || "-"}
                                             </span>
                                         </div>
-                                    </td>
+                                    </td> */}
                                     {DOCUMENT_TYPES.map((type) => (
                                         <td key={type} className={styles.td}>
                                             <div

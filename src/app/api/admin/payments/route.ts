@@ -55,7 +55,6 @@ export async function GET(request: Request) {
         const users = await prisma.user.findMany({
             where,
             include: {
-                cohort: { select: { code: true } },
                 payments: {
                     select: {
                         amount: true,

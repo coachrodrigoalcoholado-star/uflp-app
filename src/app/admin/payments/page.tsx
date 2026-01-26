@@ -344,7 +344,8 @@ export default function PaymentsPage() {
                                                         </Link>
                                                     </td>
                                                     <td>
-                                                        {rec.user.cohort?.code || <span style={{ color: 'red' }}>Sin Asignar</span>}
+                                                        <span style={{ color: '#999' }}>N/A</span>
+                                                        {/* {rec.user.cohort?.code || <span style={{ color: 'red' }}>Sin Asignar</span>} */}
                                                     </td>
                                                     <td>
                                                         <div style={{ fontWeight: 'bold' }}>U$S {rec.totalPaid}</div>

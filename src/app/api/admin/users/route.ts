@@ -48,12 +48,12 @@ export async function GET(request: Request) {
                     lastNameMaterno: true,
                     role: true,
                     profileCompleted: true,
-                    cohort: {
-                        select: {
-                            id: true,
-                            code: true
-                        }
-                    },
+                    // cohort: {
+                    //     select: {
+                    //         id: true,
+                    //         code: true
+                    //     }
+                    // },
                     documentsCompleted: true,
                     createdAt: true,
                     _count: {
@@ -68,23 +68,8 @@ export async function GET(request: Request) {
             prisma.user.count({ where })
         ]);
 
-        // Custom sort: Users without cohort first, then sorted by cohort code
-        users.sort((a, b) => {
-            const aHasCohort = !!a.cohort;
-            const bHasCohort = !!b.cohort;
-
-            // If one has cohort and the other doesn't
-            if (aHasCohort !== bHasCohort) {
-                return aHasCohort ? 1 : -1; // Unassigned comes first
-            }
-
-            // If both have cohort, sort by code
-            if (aHasCohort && bHasCohort) {
-                return a.cohort!.code.localeCompare(b.cohort!.code);
-            }
-
-            return 0; // Preserve createdAt order for same/no cohort
-        });
+        // Custom sort logic removed temporarily due to missing Cohort schema
+        // users.sort((a, b) => ... );
 
         return NextResponse.json({
             users,

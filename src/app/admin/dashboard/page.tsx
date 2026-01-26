@@ -23,7 +23,6 @@ export default async function DashboardPage() {
         include: {
             documents: true,
             payments: true,
-            cohort: true,
         },
         orderBy: {
             lastNamePaterno: "asc",
