@@ -52,6 +52,7 @@ model User {
   sedeNombre      String?
   entrenadorNombre String?
   entrenadorCelular String?
+  uflpSent        Boolean    @default(false)
 
   @@index([cohortId])
   @@index([role])

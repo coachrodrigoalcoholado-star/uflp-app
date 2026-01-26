@@ -39,6 +39,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
 
     const navItems = [
         { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+        { href: '/admin/dashboard', label: 'Estado de Entrega', icon: FileText },
         { href: '/admin/users', label: 'Usuarios', icon: Users },
         { href: '/admin/documents', label: 'Documentos', icon: FileText },
         { href: '/admin/payments', label: 'Pagos', icon: CreditCard },
