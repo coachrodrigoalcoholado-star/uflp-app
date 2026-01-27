@@ -1,13 +1,22 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server';
 import { requireSuperAdmin, requireAdminView } from '@/lib/adminAuth';
-// import prisma from '@/lib/prisma'; // Prisma client doesn't have Cohort model anymore
+import prisma from '@/lib/prisma';
 
 export async function GET(request: Request) {
     try {
         await requireAdminView();
-        // Stubbed response
-        return NextResponse.json({ cohorts: [] });
+
+        const cohorts = await prisma.cohort.findMany({
+            orderBy: { startDate: 'desc' },
+            include: {
+                _count: {
+                    select: { users: true }
+                }
+            }
+        });
+
+        return NextResponse.json({ cohorts });
     } catch (error) {
         console.error('Error fetching cohorts:', error);
         return NextResponse.json(
@@ -18,8 +27,43 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-    return NextResponse.json(
-        { error: 'Cohort creation disabled due to maintenance' },
-        { status: 503 }
-    );
+    try {
+        await requireSuperAdmin();
+        const body = await request.json();
+        const { code, startDate, endDate } = body;
+
+        if (!code || !startDate || !endDate) {
+            return NextResponse.json(
+                { error: 'Missing required fields' },
+                { status: 400 }
+            );
+        }
+
+        const existing = await prisma.cohort.findUnique({
+            where: { code }
+        });
+
+        if (existing) {
+            return NextResponse.json(
+                { error: 'Cohort code already exists' },
+                { status: 400 }
+            );
+        }
+
+        const cohort = await prisma.cohort.create({
+            data: {
+                code,
+                startDate: new Date(startDate),
+                endDate: new Date(endDate)
+            }
+        });
+
+        return NextResponse.json({ cohort });
+    } catch (error) {
+        console.error('Error creating cohort:', error);
+        return NextResponse.json(
+            { error: 'Failed to create cohort' },
+            { status: 500 }
+        );
+    }
 }

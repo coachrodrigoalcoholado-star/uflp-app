@@ -322,7 +322,7 @@ export default function UserDetailPage() {
                             </div>
                         )}
 
-                        {/* <div style={{ gridColumn: '1 / -1', marginTop: '16px', borderTop: '1px solid #eee', paddingTop: '16px' }}>
+                        <div style={{ gridColumn: '1 / -1', marginTop: '16px', borderTop: '1px solid #eee', paddingTop: '16px' }}>
                             <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Camada Asignada:</label>
                             <select
                                 value={user.cohortId || ''}
@@ -338,7 +338,7 @@ export default function UserDetailPage() {
                                     </option>
                                 ))}
                             </select>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
 
