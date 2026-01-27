@@ -48,12 +48,12 @@ export async function GET(request: Request) {
                     lastNameMaterno: true,
                     role: true,
                     profileCompleted: true,
-                    // cohort: {
-                    //     select: {
-                    //         id: true,
-                    //         code: true
-                    //     }
-                    // },
+                    cohort: {
+                        select: {
+                            id: true,
+                            code: true
+                        }
+                    },
                     documentsCompleted: true,
                     createdAt: true,
                     _count: {

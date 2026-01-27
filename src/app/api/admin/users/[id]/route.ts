@@ -22,7 +22,8 @@ export async function GET(
                 notifications: {
                     orderBy: { createdAt: 'desc' },
                     take: 20,
-                }
+                },
+                cohort: true
             }
         });
 
