@@ -20,7 +20,8 @@ export default async function Home() {
       prisma.user.findUnique({
         where: { email: session.user.email },
         include: {
-          payments: true
+          payments: true,
+          cohort: true
         }
       }),
       prisma.systemSetting.findUnique({
@@ -96,11 +97,11 @@ export default async function Home() {
                 </div>
               )}
 
-              {/* {user?.cohort && (
+              {user?.cohort && (
                 <div className={styles.cohortBadge}>
                   <strong>🎓 Tu Camada:</strong> {user.cohort.code}
                 </div>
-              )} */}
+              )}
 
               {/* Visualize the Journey */}
               <div style={{ marginTop: '2rem' }}>
