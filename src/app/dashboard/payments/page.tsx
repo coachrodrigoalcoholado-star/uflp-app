@@ -23,7 +23,7 @@ export default function PaymentsPage() {
     const [submitting, setSubmitting] = useState(false);
     const [accessBlocked, setAccessBlocked] = useState(false);
     const [blockMessage, setBlockMessage] = useState("");
-    const [totalCost, setTotalCost] = useState(350.00); // Default, updated from API
+    const [totalCost, setTotalCost] = useState(390.00); // Default, updated from API
 
     // Form states
     const [location, setLocation] = useState("");

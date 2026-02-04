@@ -17,7 +17,7 @@ export async function GET() {
 
         // Return strictly what is needed
         return NextResponse.json({
-            diploma_total_cost: setting ? setting.value : '350.00'
+            diploma_total_cost: setting ? setting.value : '390.00'
         });
     } catch (error) {
         console.error('Error fetching settings:', error);
