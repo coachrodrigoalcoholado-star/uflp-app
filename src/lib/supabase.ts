@@ -1,19 +1,19 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder';
+// Use trim() to remove any accidental whitespace from copy-pasting
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim()
+const supabaseKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim()
 
-if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder')) {
-    console.error("Supabase environment variables missing or placeholder.");
-    // We don't throw to avoid crashing build, but we log loud
+if (!supabaseUrl || !supabaseKey) {
+    console.error('Missing Supabase Environment Variables!')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function uploadFileToSupabase(file: Buffer, filename: string, contentType: string) {
     const { data, error } = await supabase
         .storage
-        .from('documents') // Ensure this bucket exists in Supabase
+        .from('documents') // Ensure this bucket exists in Supabase dashboard
         .upload(filename, file, {
             contentType,
             upsert: true
@@ -23,7 +23,6 @@ export async function uploadFileToSupabase(file: Buffer, filename: string, conte
         throw error;
     }
 
-    // Get public URL
     const { data: { publicUrl } } = supabase
         .storage
         .from('documents')
@@ -33,10 +32,7 @@ export async function uploadFileToSupabase(file: Buffer, filename: string, conte
 }
 
 export async function deleteFileFromSupabase(url: string) {
-    // Extract path from URL
-    // URL format: https://[project-id].supabase.co/storage/v1/object/public/documents/[filename]
     const path = url.split('/documents/').pop();
-
     if (!path) return;
 
     const { error } = await supabase
@@ -48,3 +44,4 @@ export async function deleteFileFromSupabase(url: string) {
         throw error;
     }
 }
+
