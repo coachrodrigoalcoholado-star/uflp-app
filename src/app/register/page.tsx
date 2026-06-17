@@ -89,7 +89,7 @@ export default function RegisterPage() {
                         <ArrowRight className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-3xl font-bold text-white mb-2">Crear Cuenta</h1>
-                    <p className="text-gray-400">Únete a SYNCRO hoy mismo</p>
+                    <p className="text-gray-400">Únete a UFLP hoy mismo</p>
                 </div>
 
                 {error && (

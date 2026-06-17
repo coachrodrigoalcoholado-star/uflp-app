@@ -327,7 +327,7 @@ export default function LoginPage() {
             </div>
             {/* Footer */}
             <div className="absolute bottom-4 text-center w-full text-[10px] text-gray-400 opacity-60">
-                🔒 Sistema Seguro • Syncro
+                🔒 Sistema Seguro • UFLP
             </div>
         </div>
     );
