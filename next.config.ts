@@ -5,10 +5,6 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
-  eslint: {
-    // Permite que Vercel compile el proyecto exitosamente ignorando advertencias de ESLint
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     // Permite que la compilación continúe a pesar de posibles detalles de tipado heredados
     ignoreBuildErrors: true,
