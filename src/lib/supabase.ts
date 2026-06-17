@@ -1,16 +1,37 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Use trim() to remove any accidental whitespace from copy-pasting
 const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim()
-const supabaseKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim()
+const supabaseKey = (
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 
+    ''
+).trim()
 
 if (!supabaseUrl || !supabaseKey) {
-    console.error('Missing Supabase Environment Variables!')
+    console.warn('Warning: Missing Supabase Environment Variables!')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// Create client only if both variables are present, otherwise export a recursive proxy to prevent crash on import
+const createDummyProxy = (path: string = 'supabase'): any => {
+    const dummy = () => {
+        throw new Error(`${path} called but Supabase is not configured. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables.`);
+    };
+    return new Proxy(dummy, {
+        get(target, prop) {
+            if (typeof prop === 'symbol') return undefined;
+            return createDummyProxy(`${path}.${String(prop)}`);
+        }
+    });
+};
+
+export const supabase = supabaseUrl && supabaseKey 
+    ? createClient(supabaseUrl, supabaseKey)
+    : createDummyProxy();
 
 export async function uploadFileToSupabase(file: Buffer, filename: string, contentType: string) {
+    if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase is not configured.');
+    }
     const { data, error } = await supabase
         .storage
         .from('documents') // Ensure this bucket exists in Supabase dashboard
@@ -32,6 +53,9 @@ export async function uploadFileToSupabase(file: Buffer, filename: string, conte
 }
 
 export async function deleteFileFromSupabase(url: string) {
+    if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase is not configured.');
+    }
     const path = url.split('/documents/').pop();
     if (!path) return;
 

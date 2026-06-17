@@ -38,7 +38,7 @@ export default function NotificationsMenu() {
         };
     }, []);
 
-    const fetchNotifications = async () => {
+    async function fetchNotifications() {
         try {
             const res = await fetch('/api/notifications');
             if (res.ok) {
@@ -49,7 +49,7 @@ export default function NotificationsMenu() {
         } catch (error) {
             console.error('Error fetching notifications:', error);
         }
-    };
+    }
 
     const markAsRead = async (id: string) => {
         try {
