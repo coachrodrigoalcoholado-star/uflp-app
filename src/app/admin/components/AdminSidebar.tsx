@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from '../admin.module.css';
-import { Menu, X, LayoutDashboard, Users, FileText, CreditCard, GraduationCap, Search, Database, Settings, LogOut } from 'lucide-react';
+import { Menu, X, LayoutDashboard, Users, FileCheck, CreditCard, Search, Database, Settings, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface AdminSidebarProps {
     user: {
@@ -39,12 +39,11 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
 
     const navItems = [
         { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-        { href: '/admin/dashboard', label: 'Estado de Entrega', icon: FileText },
-        { href: '/admin/users', label: 'Usuarios', icon: Users },
-        { href: '/admin/documents', label: 'Documentos', icon: FileText },
-        { href: '/admin/payments', label: 'Pagos', icon: CreditCard },
-        // { href: '/admin/cohorts', label: 'Camadas', icon: GraduationCap },
-        { href: '/admin/search', label: 'Búsqueda', icon: Search },
+        { href: '/admin/dashboard', label: 'Estado de Alumnos', icon: FileCheck },
+        { href: '/admin/users', label: 'Usuarios & Perfiles', icon: Users },
+        { href: '/admin/documents', label: 'Documentos', icon: FileCheck },
+        { href: '/admin/payments', label: 'Pagos & Cuotas', icon: CreditCard },
+        { href: '/admin/search', label: 'Búsqueda Rápida', icon: Search },
         { href: '/admin/reports/db', label: 'Base de Datos', icon: Database },
         { href: '/admin/settings', label: 'Configuración', icon: Settings },
     ];
@@ -57,7 +56,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
                 onClick={toggleSidebar}
                 aria-label="Toggle Menu"
             >
-                <Menu size={24} />
+                <Menu size={22} />
             </button>
 
             {/* Overlay */}
@@ -70,16 +69,21 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
             <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
                 <div className={styles.sidebarHeader}>
                     <div className={styles.headerTop}>
-                        <div>
-                            <h1 className={styles.sidebarTitle}>UFLP Admin</h1>
-                            <p className={styles.sidebarSubtitle}>Panel de Control</p>
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/25">
+                                <ShieldCheck size={20} />
+                            </div>
+                            <div>
+                                <h1 className={styles.sidebarTitle}>UFLP Admin</h1>
+                                <p className={styles.sidebarSubtitle}>Panel de Control Élite</p>
+                            </div>
                         </div>
                         <button
                             className={styles.closeButton}
                             onClick={() => setIsOpen(false)}
                             aria-label="Close Menu"
                         >
-                            <X size={24} />
+                            <X size={22} />
                         </button>
                     </div>
                 </div>
@@ -98,7 +102,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
                                         <span className={styles.navIcon}>
                                             <Icon size={18} />
                                         </span>
-                                        {item.label}
+                                        <span>{item.label}</span>
                                     </Link>
                                 </li>
                             );
@@ -112,8 +116,12 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
                             {user.name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'A'}
                         </div>
                         <div className={styles.userDetails}>
-                            <div className={styles.userName}>{user.name || user.email}</div>
-                            <div className={styles.userRole}>{user.role}</div>
+                            <div className={styles.userName}>{user.name || user.email?.split('@')[0]}</div>
+                            <div className={styles.userRole}>
+                                <span className="inline-flex items-center gap-1">
+                                    <Sparkles size={10} /> {user.role}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

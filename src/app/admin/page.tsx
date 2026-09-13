@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { requireAdminView } from '@/lib/adminAuth';
 import prisma from '@/lib/prisma';
 import AdminCharts from '@/components/AdminCharts';
+import { Users, FileCheck, CreditCard, ExternalLink, Activity, ArrowUpRight, Clock, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface AnalyticsData {
     users: {
@@ -87,11 +88,9 @@ const getAnalytics = unstable_cache(
 
         // --- Chart Data Aggregation ---
 
-        // 1. Growth Chart (Users registered per month - Last 6 months)
         const sixMonthsAgo = new Date();
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-        // Using prisma.$queryRaw could be more efficient for aggregation but for simplicity/portability in this project context logic in JS is fine (~500 users)
         const allStudents = await prisma.user.findMany({
             where: {
                 role: 'STUDENT',
@@ -100,13 +99,12 @@ const getAnalytics = unstable_cache(
             select: { createdAt: true }
         });
 
-        // Initialize last 6 months with 0
         const monthlyGrowth: Record<string, number> = {};
         for (let i = 5; i >= 0; i--) {
             const d = new Date();
             d.setMonth(d.getMonth() - i);
             const key = d.toLocaleDateString('es-ES', { month: 'short', year: '2-digit' });
-            monthlyGrowth[key] = 0; // Init
+            monthlyGrowth[key] = 0;
         }
 
         allStudents.forEach(user => {
@@ -118,19 +116,17 @@ const getAnalytics = unstable_cache(
 
         const growthChartData = Object.entries(monthlyGrowth).map(([date, count]) => ({ date, count }));
 
-        // 2. Pie Charts Data
         const paymentChartData = [
-            { name: 'Aprobados', value: approvedPayments, color: '#166534' }, // Green
-            { name: 'Pendientes', value: pendingPayments, color: '#ca8a04' }, // Yellow
-            { name: 'Rechazados', value: rejectedPayments, color: '#991b1b' }, // Red
+            { name: 'Aprobados', value: approvedPayments, color: '#10b981' },
+            { name: 'Pendientes', value: pendingPayments, color: '#f59e0b' },
+            { name: 'Rechazados', value: rejectedPayments, color: '#ef4444' },
         ].filter(item => item.value > 0);
 
         const documentChartData = [
-            { name: 'Aprobados', value: approvedDocuments, color: '#166534' },
-            { name: 'Pendientes', value: pendingDocuments, color: '#ca8a04' },
-            { name: 'Rechazados', value: rejectedDocuments, color: '#991b1b' },
+            { name: 'Aprobados', value: approvedDocuments, color: '#10b981' },
+            { name: 'Pendientes', value: pendingDocuments, color: '#f59e0b' },
+            { name: 'Rechazados', value: rejectedDocuments, color: '#ef4444' },
         ].filter(item => item.value > 0);
-
 
         return {
             users: { total: totalUsers, students: studentCount, superadmins: superadminCount },
@@ -144,10 +140,10 @@ const getAnalytics = unstable_cache(
             }
         };
     },
-    ['admin-analytics'], // Cache key
+    ['admin-analytics'],
     {
-        revalidate: 3600, // Revalidate every hour by default
-        tags: ['admin-analytics'] // Cache tag for manual invalidation
+        revalidate: 3600,
+        tags: ['admin-analytics']
     }
 );
 
@@ -158,10 +154,16 @@ export default async function AdminDashboard() {
     return (
         <>
             <div className={styles.topBar}>
-                <h1 className={styles.pageTitle}>Dashboard</h1>
+                <div>
+                    <h1 className={styles.pageTitle}>Dashboard Principal</h1>
+                    <p className="text-xs text-slate-400 mt-1 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Sistema de Gestión UFLP • Vista Ejecutiva
+                    </p>
+                </div>
                 <div className={styles.topBarActions}>
-                    <Link href="/" className={styles.btn + ' ' + styles.btnSecondary}>
-                        Ver como estudiante
+                    <Link href="/" className={`${styles.btn} ${styles.btnSecondary}`}>
+                        <ExternalLink size={15} /> Ver Portal Estudiantes
                     </Link>
                 </div>
             </div>
@@ -169,40 +171,60 @@ export default async function AdminDashboard() {
             <div className={styles.contentArea}>
                 {/* Stats Overview */}
                 <div className={styles.statsGrid}>
-                    <div className={`${styles.statCard} ${styles.success}`}>
-                        <div className={styles.statLabel}>Total Usuarios</div>
+                    <div className={styles.statCard}>
+                        <div className="flex justify-between items-start mb-2">
+                            <div className={styles.statLabel}>Total Usuarios</div>
+                            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400">
+                                <Users size={20} />
+                            </div>
+                        </div>
                         <div className={styles.statValue}>{data.users.total}</div>
                         <div className={styles.statChange}>
-                            {data.users.students} estudiantes, {data.users.superadmins} admins
+                            <span className="text-emerald-400 font-semibold">{data.users.students}</span> Estudiantes registrados
                         </div>
                     </div>
 
                     <div className={`${styles.statCard} ${styles.warning}`}>
-                        <div className={styles.statLabel}>Docs Pendientes</div>
+                        <div className="flex justify-between items-start mb-2">
+                            <div className={styles.statLabel}>Docs por Revisar</div>
+                            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+                                <FileCheck size={20} />
+                            </div>
+                        </div>
                         <div className={styles.statValue}>{data.documents.pending}</div>
                         <div className={styles.statChange}>
-                            {data.documents.approved} aprobados, {data.documents.rejected} rechazados
+                            <span className="text-emerald-400">{data.documents.approved}</span> aprobados • <span className="text-rose-400">{data.documents.rejected}</span> rechazados
                         </div>
                     </div>
 
                     <div className={`${styles.statCard} ${styles.warning}`}>
-                        <div className={styles.statLabel}>Pagos Pendientes</div>
+                        <div className="flex justify-between items-start mb-2">
+                            <div className={styles.statLabel}>Pagos por Verificar</div>
+                            <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400">
+                                <CreditCard size={20} />
+                            </div>
+                        </div>
                         <div className={styles.statValue}>{data.payments.pending}</div>
                         <div className={styles.statChange}>
-                            {data.payments.approved} aprobados, {data.payments.rejected} rechazados
+                            <span className="text-emerald-400">{data.payments.approved}</span> verificados de forma exitosa
                         </div>
                     </div>
 
-                    <div className={`${styles.statCard} ${styles.warning}`}>
-                        <div className={styles.statLabel}>Total Cobrado</div>
+                    <div className={`${styles.statCard} ${styles.success}`}>
+                        <div className="flex justify-between items-start mb-2">
+                            <div className={styles.statLabel}>Pagos Aprobados</div>
+                            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+                                <Activity size={20} />
+                            </div>
+                        </div>
                         <div className={styles.statValue}>{data.payments.approved}</div>
                         <div className={styles.statChange}>
-                            Pagos aprobados
+                            <span className="text-emerald-400 font-semibold">100%</span> procesados de forma segura
                         </div>
                     </div>
                 </div>
 
-                {/* NEW: Analytics Charts */}
+                {/* Analytics Charts */}
                 <AdminCharts
                     growthData={data.charts.growth}
                     paymentData={data.charts.payments}
@@ -212,55 +234,59 @@ export default async function AdminDashboard() {
                 {/* Quick Actions */}
                 <div className={styles.card}>
                     <div className={styles.cardHeader}>
-                        <h2 className={styles.cardTitle}>Acciones Rápidas</h2>
+                        <h2 className={styles.cardTitle}>
+                            <Sparkles size={18} className="text-blue-400" /> Acciones Rápidas de Administración
+                        </h2>
                     </div>
-                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                    <div className="flex gap-3 flex-wrap">
                         <Link href="/admin/documents" className={`${styles.btn} ${styles.btnPrimary}`}>
-                            Revisar Documentos ({data.documents.pending})
+                            <FileCheck size={16} /> Revisar Documentos ({data.documents.pending})
                         </Link>
                         <Link href="/admin/payments" className={`${styles.btn} ${styles.btnPrimary}`}>
-                            Verificar Pagos ({data.payments.pending})
+                            <CreditCard size={16} /> Verificar Pagos ({data.payments.pending})
                         </Link>
                         <Link href="/admin/users" className={`${styles.btn} ${styles.btnSecondary}`}>
-                            Gestionar Usuarios
+                            <Users size={16} /> Gestionar Usuarios
                         </Link>
                         <Link href="/admin/reports/db" className={`${styles.btn} ${styles.btnSecondary}`}>
-                            Base de Datos
+                            <Activity size={16} /> Base de Datos
                         </Link>
                     </div>
                 </div>
 
-                {/* Recent Activity */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginTop: '2rem' }}>
+                {/* Recent Activity Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                     {/* Recent Users */}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
-                            <h2 className={styles.cardTitle}>Usuarios Recientes</h2>
-                            <Link href="/admin/users">Ver todos →</Link>
+                            <h2 className={styles.cardTitle}>
+                                <Users size={18} className="text-blue-400" /> Usuarios Recientes
+                            </h2>
+                            <Link href="/admin/users" className="text-xs text-blue-400 hover:underline flex items-center gap-1 font-semibold">
+                                Ver todos <ArrowUpRight size={14} />
+                            </Link>
                         </div>
-                        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                        <div className="max-h-72 overflow-y-auto pr-1">
                             {data.recent.users.length === 0 ? (
-                                <p style={{ color: '#6b7280', fontSize: '14px' }}>No hay usuarios registrados</p>
+                                <p className="text-slate-500 text-xs py-4 text-center">No hay usuarios registrados</p>
                             ) : (
-                                <table className={styles.table}>
-                                    <tbody>
-                                        {data.recent.users.map((user) => (
-                                            <tr key={user.id}>
-                                                <td>
-                                                    <strong>{user.firstName ? `${user.firstName} ${user.lastNamePaterno}` : user.email}</strong>
-                                                    <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                                                        {new Date(user.createdAt).toLocaleDateString('es-ES')}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span className={user.role === 'SUPERADMIN' ? styles.badgeApproved : styles.badgePending}>
-                                                        {user.role}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <div className="space-y-3">
+                                    {data.recent.users.map((user) => (
+                                        <div key={user.id} className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs font-bold text-slate-100">
+                                                    {user.firstName ? `${user.firstName} ${user.lastNamePaterno}` : user.email}
+                                                </div>
+                                                <div className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
+                                                    <Clock size={11} /> {new Date(user.createdAt).toLocaleDateString('es-ES')}
+                                                </div>
+                                            </div>
+                                            <span className={user.role === 'SUPERADMIN' ? styles.badgeApproved : styles.badgePending}>
+                                                {user.role}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -268,30 +294,30 @@ export default async function AdminDashboard() {
                     {/* Pending Documents */}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
-                            <h2 className={styles.cardTitle}>Documentos Pendientes</h2>
-                            <Link href="/admin/documents">Ver todos →</Link>
+                            <h2 className={styles.cardTitle}>
+                                <FileCheck size={18} className="text-amber-400" /> Docs. Pendientes
+                            </h2>
+                            <Link href="/admin/documents" className="text-xs text-blue-400 hover:underline flex items-center gap-1 font-semibold">
+                                Ver todos <ArrowUpRight size={14} />
+                            </Link>
                         </div>
-                        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                        <div className="max-h-72 overflow-y-auto pr-1">
                             {data.recent.documents.length === 0 ? (
-                                <p style={{ color: '#6b7280', fontSize: '14px' }}>No hay documentos pendientes</p>
+                                <p className="text-slate-500 text-xs py-4 text-center">No hay documentos pendientes</p>
                             ) : (
-                                <table className={styles.table}>
-                                    <tbody>
-                                        {data.recent.documents.map((doc) => (
-                                            <tr key={doc.id}>
-                                                <td>
-                                                    <strong>{doc.type}</strong>
-                                                    <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                                                        {doc.user.firstName ? `${doc.user.firstName} ${doc.user.lastNamePaterno}` : doc.user.email}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span className={styles.badgePending}>{doc.status}</span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <div className="space-y-3">
+                                    {data.recent.documents.map((doc) => (
+                                        <div key={doc.id} className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs font-bold text-slate-100">{doc.type}</div>
+                                                <div className="text-[11px] text-slate-400 mt-0.5">
+                                                    {doc.user.firstName ? `${doc.user.firstName} ${doc.user.lastNamePaterno}` : doc.user.email}
+                                                </div>
+                                            </div>
+                                            <span className={styles.badgePending}>{doc.status}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -299,30 +325,30 @@ export default async function AdminDashboard() {
                     {/* Pending Payments */}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
-                            <h2 className={styles.cardTitle}>Pagos Pendientes</h2>
-                            <Link href="/admin/payments">Ver todos →</Link>
+                            <h2 className={styles.cardTitle}>
+                                <CreditCard size={18} className="text-purple-400" /> Pagos Pendientes
+                            </h2>
+                            <Link href="/admin/payments" className="text-xs text-blue-400 hover:underline flex items-center gap-1 font-semibold">
+                                Ver todos <ArrowUpRight size={14} />
+                            </Link>
                         </div>
-                        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                        <div className="max-h-72 overflow-y-auto pr-1">
                             {data.recent.payments.length === 0 ? (
-                                <p style={{ color: '#6b7280', fontSize: '14px' }}>No hay pagos pendientes</p>
+                                <p className="text-slate-500 text-xs py-4 text-center">No hay pagos pendientes</p>
                             ) : (
-                                <table className={styles.table}>
-                                    <tbody>
-                                        {data.recent.payments.map((payment) => (
-                                            <tr key={payment.id}>
-                                                <td>
-                                                    <strong>${payment.amount}</strong>
-                                                    <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                                                        {payment.user.firstName ? `${payment.user.firstName} ${payment.user.lastNamePaterno}` : payment.user.email}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span className={styles.badgePending}>{payment.status}</span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <div className="space-y-3">
+                                    {data.recent.payments.map((payment) => (
+                                        <div key={payment.id} className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs font-bold text-slate-100">${payment.amount} USD</div>
+                                                <div className="text-[11px] text-slate-400 mt-0.5">
+                                                    {payment.user.firstName ? `${payment.user.firstName} ${payment.user.lastNamePaterno}` : payment.user.email}
+                                                </div>
+                                            </div>
+                                            <span className={styles.badgePending}>{payment.status}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             )}
                         </div>
                     </div>
