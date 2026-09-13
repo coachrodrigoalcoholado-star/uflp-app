@@ -34,11 +34,12 @@ export default function UsersPage() {
     const [search, setSearch] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
     const [profileFilter, setProfileFilter] = useState('');
+    const [cohortFilter, setCohortFilter] = useState('');
 
     useEffect(() => {
         fetchUsers();
         fetchCohorts();
-    }, [search, roleFilter, profileFilter]);
+    }, [search, roleFilter, profileFilter, cohortFilter]);
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -46,6 +47,7 @@ export default function UsersPage() {
         if (search) params.append('search', search);
         if (roleFilter) params.append('role', roleFilter);
         if (profileFilter) params.append('profileCompleted', profileFilter);
+        if (cohortFilter) params.append('cohortId', cohortFilter);
 
         const res = await fetch(`/api/admin/users?${params}`);
         const data = await res.json();
@@ -141,6 +143,63 @@ export default function UsersPage() {
             </div>
 
             <div className={styles.contentArea}>
+                {/* Cohort Card Blocks */}
+                <div className={styles.cohortGrid}>
+                    <div
+                        className={`${styles.cohortCard} ${cohortFilter === '' ? styles.cohortCardActive : ''}`}
+                        onClick={() => setCohortFilter('')}
+                    >
+                        <div className={styles.cohortCardHeader}>
+                            <span className={styles.cohortCode}>Todas las Camadas</span>
+                            <span className={styles.cohortUserCount}>
+                                {cohorts.reduce((acc, c) => acc + (c._count?.users || 0), 0)}
+                            </span>
+                        </div>
+                        <div className={styles.cohortCardFooter}>
+                            <span className={styles.cohortStatusBadge}>Vista Global</span>
+                            <span>Todos los alumnos</span>
+                        </div>
+                    </div>
+                    {cohorts.map((c) => (
+                        <div
+                            key={c.id}
+                            className={`${styles.cohortCard} ${cohortFilter === c.id ? styles.cohortCardActive : ''}`}
+                            onClick={() => setCohortFilter(c.id)}
+                        >
+                            <div className={styles.cohortCardHeader}>
+                                <span className={styles.cohortCode}>Camada {c.code}</span>
+                                <span className={styles.cohortUserCount}>{c._count?.users || 0}</span>
+                            </div>
+                            <div className={styles.cohortCardFooter}>
+                                <span className={styles.cohortStatusBadge}>Activa</span>
+                                <span>{new Date(c.startDate).toLocaleDateString('es-ES')}</span>
+                            </div>
+                        </div>
+                    ))}
+                    <div
+                        className={`${styles.cohortCard} ${cohortFilter === 'UNASSIGNED' ? styles.cohortCardActive : ''}`}
+                        onClick={() => setCohortFilter('UNASSIGNED')}
+                    >
+                        <div className={styles.cohortCardHeader}>
+                            <span className={styles.cohortCode} style={{ color: '#f87171' }}>Sin Camada</span>
+                            <span className={styles.cohortUserCount} style={{ color: '#f87171' }}>!</span>
+                        </div>
+                        <div className={styles.cohortCardFooter}>
+                            <span
+                                className={styles.cohortStatusBadge}
+                                style={{
+                                    color: '#f87171',
+                                    background: 'rgba(239, 68, 68, 0.15)',
+                                    borderColor: 'rgba(239, 68, 68, 0.3)'
+                                }}
+                            >
+                                Pendientes
+                            </span>
+                            <span>Sin asignar</span>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Search and Filters */}
                 <div className={styles.card}>
                     <div className={styles.searchBar}>
@@ -151,6 +210,19 @@ export default function UsersPage() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
+                        <select
+                            className={styles.filterSelect}
+                            value={cohortFilter}
+                            onChange={(e) => setCohortFilter(e.target.value)}
+                        >
+                            <option value="">Todas las camadas</option>
+                            {cohorts.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                    Camada {c.code} ({c._count?.users || 0})
+                                </option>
+                            ))}
+                            <option value="UNASSIGNED">Sin Camada (Por Asignar)</option>
+                        </select>
                         <select
                             className={styles.filterSelect}
                             value={roleFilter}

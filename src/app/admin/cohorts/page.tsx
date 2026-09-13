@@ -1,15 +1,19 @@
 'use client';
-import styles from '../admin.module.css';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function CohortsPage() {
+    const router = useRouter();
+
+    useEffect(() => {
+        router.replace('/admin/users');
+    }, [router]);
+
     return (
-        <div className={styles.contentArea}>
-            <div className={styles.card}>
-                <h1 className={styles.pageTitle}>Gestión de Camadas</h1>
-                <p style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
-                    Funcionalidad desactivada temporalmente debido a mantenimiento de base de datos.
-                </p>
-            </div>
+        <div style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
+            Redirigiendo a la gestión de usuarios por camada...
         </div>
     );
 }
+
