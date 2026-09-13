@@ -314,7 +314,7 @@ export default function DashboardTable({ initialData }: DashboardTableProps) {
                                                 {user.lastNamePaterno} {user.lastNameMaterno}, {user.firstName}
                                             </span>
                                             {user.phone && (
-                                                <span className="text-xs text-slate-500 font-medium">
+                                                <span className="text-xs text-pink-400 font-semibold mt-0.5">
                                                     📞 {user.phone}
                                                 </span>
                                             )}
@@ -323,7 +323,7 @@ export default function DashboardTable({ initialData }: DashboardTableProps) {
                                     {/* Cohort Column - Restored */}
                                     <td className={styles.td}>
                                         <div className="flex justify-center">
-                                            <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs font-semibold border border-slate-200">
+                                            <span className="bg-slate-800/90 text-sky-300 px-2.5 py-1 rounded-full text-xs font-bold border border-slate-700">
                                                 {user.cohort?.code || "-"}
                                             </span>
                                         </div>
